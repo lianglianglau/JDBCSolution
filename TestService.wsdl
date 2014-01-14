@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:axis2="http://strategy.aaron.com" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://strategy.aaron.com">
+    <wsdl:types/>
+    <wsdl:message name="TestRequest"/>
+    <wsdl:portType name="TestServicePortType">
+        <wsdl:operation name="Test">
+            <wsdl:input message="axis2:TestRequest" wsaw:Action="urn:Test"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="TestServiceSoap11Binding" type="axis2:TestServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="Test">
+            <soap:operation soapAction="urn:Test" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="TestServiceSoap12Binding" type="axis2:TestServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="Test">
+            <soap12:operation soapAction="urn:Test" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="TestServiceHttpBinding" type="axis2:TestServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="Test">
+            <http:operation location="TestService/Test"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="Test"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="TestService">
+        <wsdl:port name="TestServiceHttpSoap11Endpoint" binding="axis2:TestServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/TestService"/>
+        </wsdl:port>
+        <wsdl:port name="TestServiceHttpSoap12Endpoint" binding="axis2:TestServiceSoap12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/TestService"/>
+        </wsdl:port>
+        <wsdl:port name="TestServiceHttpEndpoint" binding="axis2:TestServiceHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/TestService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
